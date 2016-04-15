@@ -13,19 +13,13 @@ echo "process started, pid="$current_pid
 while :
 do
     date
-    #git fetch
-    echo "checking for new commits"
-    
-    #sudo git pull| grep -q -v 'Already up-to-date.' && changed=1
-    #changed=0;sudo ls| grep -q -v 'test' && changed=1
+    #echo "checking for new commits"
     
     git fetch
     LOCAL=$(git log -p -1])
     #echo LOCAL = $LOCAL
     REMOTE=$(git log -p -1 origin/master)
     #echo REMOTE = $REMOTE
-    #BASE=$(git merge-base @ @{u})
-    #echo BASE = $BASE
     
     if [ "$LOCAL" = "$REMOTE" ]; then
         echo "No new commit found"
@@ -38,10 +32,14 @@ do
         npm install
         echo "Stop existing running process"
         sudo kill $current_pid 2>/dev/null
+        echo "Restart process"
+        npm start &
+        current_pid=$!
+        echo "process started, pid="$current_pid
     fi
     
     echo
     echo
     
-    sleep 5
+    sleep 10
 done
